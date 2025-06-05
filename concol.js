@@ -3,11 +3,11 @@ import { styleText } from 'node:util';
 
 export class ConCol {
 
-  static #appNameLen = 0;
-  static #namePad = 34;
-  static #valuePad = 10;
-  static #numFormat = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 0 });
-  static #timeFormat = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', fractionalSecondDigits: 3 });
+  static appSize = 14;
+  static nameSize = 30;
+  static valueSize = 8;
+  static numFormat = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 0 });
+  static timeFormat = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', fractionalSecondDigits: 3 });
 
   #app = 'ConCol';
   #color = 'white';
@@ -24,9 +24,6 @@ export class ConCol {
     // app name
     this.#app = (appName || '').trim();
 
-    const aL = this.#app.length;
-    if (aL > ConCol.#appNameLen) ConCol.#appNameLen = aL;
-
     // app base color
     this.#color = color || this.#color;
 
@@ -34,7 +31,6 @@ export class ConCol {
     this.#levelShow = levelShow || this.#levelShow;
 
   }
-
 
   /**
    * Outputs log message
@@ -90,7 +86,7 @@ export class ConCol {
     if (level > this.#levelShow) return;
 
     msg = this.#parseLog(msg, this.#color, typeMsg, typeColor);
-    const pre = this.#appPrefix();
+    const pre = this.#appPrefix(typeColor);
 
     msg.forEach(m => {
       console[method]( pre + m );
@@ -104,11 +100,11 @@ export class ConCol {
    * @private
    * @returns {string}
    */
-  #appPrefix() {
+  #appPrefix(typeColor) {
 
     return (
-      styleText( 'grey', ConCol.#timeFormat.format(new Date()) ) +
-      styleText( ['dim', this.#color], ` [${ this.#app.padEnd( ConCol.#appNameLen, ' ') }] `)
+      styleText( typeColor || ['dim', this.#color], ConCol.timeFormat.format(new Date()) ) +
+      styleText( this.#color, ` ${ this.#app.slice(0, ConCol.appSize).padEnd( ConCol.appSize, ' ') }┃ `)
     );
   }
 
@@ -149,12 +145,12 @@ export class ConCol {
           val = val || '';
         }
         else {
-          val = ConCol.#numFormat.format( parseFloat(val) );
+          val = ConCol.numFormat.format( parseFloat(val) ).padStart(ConCol.valueSize, ' ');
         }
 
         ret = [
-          styleText(color, name.padStart(ConCol.#namePad - typeMsg.length, ' ') + ':') +
-          styleText('white', val.padStart(ConCol.#valuePad, ' ') + unit)
+          styleText(color, name.padStart(ConCol.nameSize - typeMsg.length, ' ') + ': ') +
+          styleText('white', val + unit)
         ];
       }
       else {

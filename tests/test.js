@@ -7,7 +7,7 @@ import { ConCol } from '../concol.js';
 const
   concol1 = new ConCol('App One', 'cyan'),
   concol2 = new ConCol('App Two', 'green'),
-  concol3 = new ConCol('App Three', 'white', 3);
+  concol3 = new ConCol('App Three abcdefghi', 'white', 3);
 
 // strings
 concol1.log('output a single string');
@@ -23,9 +23,14 @@ concol1.error('output error');
 await wait(50);
 
 // name/value/units
+concol2.log(['long number', 12345.678]);
 concol2.log(['modules required', 0]);
 concol2.log(['code', 180, ' lines']);
 concol2.log(['\noutput the fibonacci sequence', ['first', 1], ['second', 1], ['third', 2], ['forth', 3] ]);
+
+concol2.log([ '\n', ['string value', 'str'] ]);
+concol2.log([ ['string value', 'string'] ]);
+concol2.log([ ['string value', 'longer string'] ]);
 
 concol2.warn([ ['errors in module', 0, ' found'] ]);
 concol2.error('error 1\nerror 2');

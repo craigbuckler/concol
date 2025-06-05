@@ -1,6 +1,6 @@
 {
   "name": "concol",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Node.js color console logger",
   "type": "module",
   "main": "./concol.js",
